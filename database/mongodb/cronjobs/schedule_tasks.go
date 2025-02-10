@@ -13,7 +13,8 @@ func (cr *CronJob) ScheduleDailyMarketJobs(mongodatabase *mongo.Database) {
 	store.StoreIndicesData(mongodatabase.Collection("indices-data"))
 	store.StoreNepseData(mongodatabase.Collection("nepse-data"))
 	store.MarketMovers(mongodatabase.Collection("marketmovers"))
-	_, err := cr.c.AddFunc("3 15 * * 0-4", func() {
+	log.Print("Scheduling market job")
+	id, err := cr.c.AddFunc("8 15 * * 0-4", func() {
 		fmt.Println("Cron job with ID 1 is scheduled.")
 		// Check if the market is open before running the jobs
 		if !utils.IsMarketOpenGlobal {
@@ -30,10 +31,12 @@ func (cr *CronJob) ScheduleDailyMarketJobs(mongodatabase *mongo.Database) {
 	if err != nil {
 		fmt.Printf("Error scheduling market jobs: %v\n", err)
 	}
-	fmt.Print("done market")
+	log.Printf("Market Job Scheduled with id %v", id)
+
 }
 
 func (cr *CronJob) ScheduleDailyMarketCheck() {
+	utils.IsMarketOpenGlobal = true
 
 	_, err := cr.c.AddFunc("0 11 * * 0-4", func() {
 		fmt.Println("Cron job with ID 2 is scheduled.")
@@ -43,7 +46,7 @@ func (cr *CronJob) ScheduleDailyMarketCheck() {
 		fmt.Print("error scheduling utils init function")
 	}
 
-	_, err = cr.c.AddFunc("2 15 * * *", func() {
+	_, err = cr.c.AddFunc("2 16 * * *", func() {
 		fmt.Println("Cron job with ID 3 is scheduled.")
 		utils.IsMarketOpenGlobal = false
 	})
@@ -104,6 +107,7 @@ func (cr *CronJob) ScheduleDailyMarketData(mongodatabase *mongo.Database) {
 }
 
 func (cr *CronJob) ScheduleIPOAndFPOData(mongodatabase *mongo.Database) {
+	store.StoreIpoandFpoData(mongodatabase.Collection("ipo-fpo"))
 	_, err := cr.c.AddFunc("0 9-18/2 * * *", func() {
 		fmt.Println("Cron job with ID 7 is scheduled.")
 		// Add your task here
@@ -119,19 +123,14 @@ func (cr *CronJob) InitScheduler() {
 	mongoDatabase := cr.MongoClient.Database("nepsedata")
 
 	//schedule marketsummary functions
-	fmt.Print("the cron job is scheduled")
 	// cr.ScheduleDailyMarketData(mongoDatabase)
 	cr.ScheduleDailyMarketJobs(mongoDatabase)
 	cr.ScheduleDailyMarketCheck()
 	cr.ScheduleIPOAndFPOData(mongoDatabase)
-	// cr.ScheduleDailyMarketData(mongoDatabase)
+	cr.ScheduleDailyMarketData(mongoDatabase)
 	log.Print("scheduled")
+	select {}
 
 	// // Extract values from the store functions
-	// store.StoreIndicesData(mongoDatabase.Collection("indices-data"))
-	// store.StoreNepseData(mongoDatabase.Collection("nepse-data"))
-	// store.MarketMovers(mongoDatabase.Collection("marketmovers"))
-	// store.StoreOrUpdateMarketData(mongoDatabase.Collection("market-data"))
-	// store.StoreIpoandFpoData(mongoDatabase.Collection("ipo-fpo"))
 
 }

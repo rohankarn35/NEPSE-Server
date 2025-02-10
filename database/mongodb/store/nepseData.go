@@ -41,5 +41,6 @@ func StoreNepseData(collection *mongo.Collection) {
 	if err != nil {
 		log.Printf("Failed to upsert nepse data: %v", err)
 	}
+	log.Print("Nepse Data updated")
 
 }

@@ -1,10 +1,7 @@
 package constants
 
 import (
-	"log"
 	"os"
-
-	"github.com/joho/godotenv"
 )
 
 var (
@@ -19,10 +16,6 @@ var (
 )
 
 func InitConstant() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
 
 	DB_URL = os.Getenv("DB_URL")
 	INDICES_URL = os.Getenv("INDICES_URL")

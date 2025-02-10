@@ -88,4 +88,5 @@ func StoreIpoandFpoData(collection *mongo.Collection) {
 			log.Printf("Failed to update data: %v", err)
 		}
 	}
+	log.Print("fpo data updated sucessfully")
 }

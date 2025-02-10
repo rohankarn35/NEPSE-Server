@@ -82,5 +82,6 @@ func MarketMovers(collection *mongo.Collection) {
 			log.Printf("Failed to update data: %v", err)
 		}
 	}
+	log.Print("market movers sucessfully")
 
 }

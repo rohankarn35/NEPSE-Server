@@ -52,5 +52,6 @@ func StoreIndicesData(collection *mongo.Collection) {
 		if err != nil {
 			log.Fatalf("Failed to update index: %v", err)
 		}
+		log.Print("Indicess data updated sucessfully")
 	}
 }
