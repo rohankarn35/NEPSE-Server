@@ -13,6 +13,7 @@ var (
 	STOCK_LIVE_URL        string
 	INDEX_LIVE_URL        string
 	FPO_URL               string
+	MARKET_STATUS_URL     string
 )
 
 func InitConstant() {
@@ -25,4 +26,5 @@ func InitConstant() {
 	LOW_MARKET_MOVER_URL = os.Getenv("Low_MARKET_MOVER_URL")
 	STOCK_LIVE_URL = os.Getenv("STOCK_LIVE_URL")
 	INDEX_LIVE_URL = os.Getenv("INDEX_LIVE_URL")
+	MARKET_STATUS_URL = os.Getenv("MARKET_STATUS_URL")
 }
